@@ -1,0 +1,22 @@
+---
+# tasks file for mysql_db
+
+     - name: create MYSQL config file
+       copy:
+        content: |
+          [client]
+          user=root
+          password="{{ db_user_password }}"
+
+        dest: "/etc/.my.cnf"
+
+     - name: start mysql service
+       service: name=mysqld state=started enabled=yes
+
+     - name: create Application database
+       mysql_db: name={{ db_name }} state=present
+
+
+     - name: create DB user
+       mysql_user: name={{ db_user }} password={{ db_user_password }} priv='*.*:ALL' state=present
+
